@@ -1,2 +1,2 @@
 # BMIApp
-Simple BMI App
+Simple BMI App using Tkinter
