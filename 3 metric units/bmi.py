@@ -12,7 +12,7 @@ class BMI_APP(ctk.CTk):
 
         self.title('')
         self.geometry('400x400')
-        self.iconbitmap('5BMI/2 functionality/empty.ico')
+        self.iconbitmap('3 metric units/empty.ico')
         self.resizable(False,False)
         self.change_title_bar_color()
 
@@ -30,7 +30,7 @@ class BMI_APP(ctk.CTk):
         #* Tracing
         self.weight_float.trace('w', self.update_bmi)
         self.height_int.trace('w', self.update_bmi)
-        self.metric_bool.trace('w', self.change_units)
+        self.metric_bool.trace('w', self.change_units) #! updates numbers from metric to imperial or vice versa when label is toggled
 
         
         
@@ -49,7 +49,7 @@ class BMI_APP(ctk.CTk):
         bmi_result = weight_kg / height_meter ** 2
         self.bmi_string.set(round(bmi_result,2))
     
-    def change_units(self, *args):
+    def change_units(self, *args): 
         self.height_input.update_text(self.height_int.get())
         self.weight_input.update_weight()
 
@@ -70,13 +70,13 @@ class BMI_APP(ctk.CTk):
             pass
 
 
-class ResultText(ctk.CTkLabel):
+class ResultText(ctk.CTkLabel): #! contains the results
     def __init__(self, parent, bmi_string):
         font = ctk.CTkFont(family = FONT, size = MAIN_TEXT_SIZE, weight = 'bold')
         super().__init__(parent, text = 22.5, font = font, text_color = WHITE, textvariable = bmi_string)
         self.grid(row = 0, column = 0, rowspan = 2, sticky = 'news')
 
-class WeightInput(ctk.CTkFrame):
+class WeightInput(ctk.CTkFrame): #! contains buttons, and weight label
     def __init__(self, parent,weight_float, metric_bool):
         super().__init__(parent, fg_color = WHITE)
         self.grid(row = 2, column = 0, sticky = 'enws', padx = 10, pady = 10)
@@ -156,7 +156,7 @@ class WeightInput(ctk.CTkFrame):
                 else:
                     amount = .1
 
-            else: #! imperial    
+            else: #! imperial
                 if info[1] == 'large':
                     amount = .453592
 
@@ -173,11 +173,11 @@ class WeightInput(ctk.CTkFrame):
             self.output_string.set(f'{round(self.weight_float.get(),2)}kg')
         
         else:
-            raw_ounces = self.weight_float.get() * 2.20462 * 16
+            raw_ounces = self.weight_float.get() * 2.20462 * 16 #! converts kg to lbs to oz
             pounds, ounces = divmod(raw_ounces, 16)
             self.output_string.set(f'{int(pounds)}lb {int(ounces)}oz')
 
-class HeightInput(ctk.CTkFrame):
+class HeightInput(ctk.CTkFrame): #! contains height slider, and height slider
 
 
     def __init__(self,parent, height_int, metric_bool):
@@ -212,12 +212,12 @@ class HeightInput(ctk.CTkFrame):
         
         else: #! imperial units
 
-            feet, inches = divmod(amount / 2.54, 12)
+            feet, inches = divmod(amount / 2.54, 12) #! gets quotient and remainder
             
             self.output_string.set(f'{int(feet)}\'{int(inches)}\"')
 
 
-class UnitSwitcher(ctk.CTkLabel):
+class UnitSwitcher(ctk.CTkLabel): #! changes unit label
     def __init__(self,parent, metric_bool):
         super().__init__(parent, text = 'metric', text_color = DARK_GREEN, font = ctk.CTkFont(family = FONT, size = SWITCH_FONT_SIZE))
         self.place(relx = .95, rely = .01, anchor = 'ne', )
